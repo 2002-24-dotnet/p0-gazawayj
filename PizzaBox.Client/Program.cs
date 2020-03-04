@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PizzaBox.Domain.Models;
 
 namespace PizzaBox.Client
 {
-    internal class Program
+  internal class Program
+  {
+    private PizzaRepository _pr = new PizzaRepository();
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            GetAllPizzas();
-        }
-
-        private static void GetAllPizzas()
-        {
-          var lp = new List<Pizza>()
-          {
-            new Pizza()
-          };
-          foreach (var p in lp)
-          {
-            System.Console.WriteLine(p);
-          }
-        }
+      GetAllPizzas();
     }
+
+    private static void GetAllPizzas()
+    {
+      
+      foreach (var p in _pr.Get())
+      {
+        System.Console.WriteLine(p);
+      }
+    }
+  }
 }

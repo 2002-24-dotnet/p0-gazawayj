@@ -1,0 +1,14 @@
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Client
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Client.deps.json
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Client.runtimeconfig.json
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Client.runtimeconfig.dev.json
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Client.dll
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Client.pdb
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Domain.dll
+/home/j/revature_projects/p0/PizzaBox.Client/bin/Debug/netcoreapp3.1/PizzaBox.Domain.pdb
+/home/j/revature_projects/p0/PizzaBox.Client/obj/Debug/netcoreapp3.1/PizzaBox.Client.csprojAssemblyReference.cache
+/home/j/revature_projects/p0/PizzaBox.Client/obj/Debug/netcoreapp3.1/PizzaBox.Client.AssemblyInfoInputs.cache
+/home/j/revature_projects/p0/PizzaBox.Client/obj/Debug/netcoreapp3.1/PizzaBox.Client.AssemblyInfo.cs
+/home/j/revature_projects/p0/PizzaBox.Client/obj/Debug/netcoreapp3.1/PizzaBox.Client.csproj.CopyComplete
+/home/j/revature_projects/p0/PizzaBox.Client/obj/Debug/netcoreapp3.1/PizzaBox.Client.dll
+/home/j/revature_projects/p0/PizzaBox.Client/obj/Debug/netcoreapp3.1/PizzaBox.Client.pdb

@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "PizzaBox.Client/1.0.0": {
+        "dependencies": {
+          "PizzaBox.Domain": "1.0.0"
+        },
+        "runtime": {
+          "PizzaBox.Client.dll": {}
+        }
+      },
+      "PizzaBox.Domain/1.0.0": {
+        "runtime": {
+          "PizzaBox.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PizzaBox.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PizzaBox.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
