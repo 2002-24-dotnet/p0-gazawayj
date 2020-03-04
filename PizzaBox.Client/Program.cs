@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using PizzaBox.Domain.Models;
+﻿using PizzaBox.Storage.Repositories;
 
 namespace PizzaBox.Client
 {
   internal class Program
   {
-    private PizzaRepository _pr = new PizzaRepository();
+    private static PizzaRepository _pr = new PizzaRepository();
     private static void Main(string[] args)
     {
       GetAllPizzas();
