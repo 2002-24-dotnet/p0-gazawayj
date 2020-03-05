@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using PizzaBox.Domain.Interfaces;
+using PizzaBox.Domain.Models;
 
 namespace PizzaBox.Domain.Abstracts
 {
@@ -16,5 +18,13 @@ namespace PizzaBox.Domain.Abstracts
         get { return _phone; }
         set { _phone = value; }
     }
+    private string _login;
+    public string Login
+    {
+        get { return _login; }
+        set { _login = value; }
+    }
+    
+    public abstract Dictionary<int, Order> GetOrders();
   }
 }
