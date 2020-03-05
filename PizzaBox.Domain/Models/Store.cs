@@ -25,10 +25,10 @@ namespace PizzaBox.Domain.Models
     /// Get available sizes for this store
     /// </summary>
     /// <returns>A dictionary containing the sizes</returns>
-    public Dictionary<int, Sizes> GetSizes()
+    public Dictionary<int, Size> GetSizes()
     {
       //TODO: implement
-      return new Dictionary<int, Sizes>();
+      return new Dictionary<int, Size>();
     }
     /// <summary>
     /// Get available crusts for this store

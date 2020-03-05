@@ -1,10 +1,11 @@
-﻿using PizzaBox.Storage.Repositories;
+﻿using PizzaBox.Domain.Singleton;
+using PizzaBox.Storage.Repositories;
 
 namespace PizzaBox.Client
 {
   internal class Program
   {
-    private static PizzaRepository _pr = new PizzaRepository();
+    private static PizzariaSingleton _pr = new PizzariaSingleton();
     private static void Main(string[] args)
     {
       //TODO: Ask for log in type
