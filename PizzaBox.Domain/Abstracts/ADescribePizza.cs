@@ -8,7 +8,7 @@ namespace PizzaBox.Domain.Abstracts
     public decimal Price { get; set; }
     #region NAVIGATIONAL PROPERTIES
     //public virtual long PizzaId { get; set; }
-    public virtual Pizza Pizza { get; set; }
+    //public virtual Pizza Pizza { get; set; }
     #endregion
   }
 }

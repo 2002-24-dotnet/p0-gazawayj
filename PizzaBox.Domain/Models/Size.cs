@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PizzaBox.Domain.Abstracts;
 
 namespace PizzaBox.Domain.Models
@@ -11,6 +12,7 @@ namespace PizzaBox.Domain.Models
         get { return _pizzaSize; }
         set { _pizzaSize = value; }
     }
+    public List<Pizza> Pizzas { get; set; }
 
     public long SizeId { get; set; }
 

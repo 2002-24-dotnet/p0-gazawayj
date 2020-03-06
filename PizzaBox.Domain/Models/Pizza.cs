@@ -22,8 +22,10 @@ namespace PizzaBox.Domain.Models
         get { return _size; }
         set { _size = value; }
     }
-    private List<Topping> _toppings;
-    public List<Topping> Toppings
+    private List<PizzaTopping> _toppings;
+    public long userId;
+
+    public List<PizzaTopping> Toppings
     {
         get { return _toppings; }
         set { _toppings = value; }
@@ -38,7 +40,7 @@ namespace PizzaBox.Domain.Models
         {
           return 0;
         }
-        return Crust.Price + Size.Price + (Toppings.Sum( t => t.Price));
+        return Crust.Price + Size.Price + (Toppings.Sum( t => t.Topping.Price));
       }
     }
     

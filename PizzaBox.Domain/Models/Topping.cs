@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PizzaBox.Domain.Abstracts;
 
 namespace PizzaBox.Domain.Models
@@ -18,6 +19,8 @@ namespace PizzaBox.Domain.Models
         get { return _price; }
         set { _price = value; }
     }
+
+    public List<PizzaTopping> PizzaToppings { get; set; }
     public Topping()
     {
       ToppingId = DateTime.Now.Ticks;

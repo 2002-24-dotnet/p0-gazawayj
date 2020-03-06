@@ -24,19 +24,15 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<Crust>().HasKey(c => c.CrustId);
       builder.Entity<Size>().HasKey(s => s.SizeId);
       builder.Entity<Topping>().HasKey(t => t.ToppingId);
+      builder.Entity<PizzaTopping>().HasKey(pt => new { pt.PizzaId, pt.ToppingId });
       //define primary key of entity type (table) pizza
       builder.Entity<Pizza>().HasKey(p => p.PizzaId);
 
-      builder.Entity<Crust>().HasMany<Pizza>().WithOne(p => p.Crust);
-      builder.Entity<Size>().HasMany<Pizza>().WithOne(p => p.Size);
-      //Need to update so that many pizzas can have the same crust, topping, etc
-      builder.Entity<Topping>().HasMany<Pizza>();
-
-
-      //Define each table type
-
-      //Defines the pizza, uncomment for signature pizzas
-      //builder.Entity<Pizza>().HasData(new Pizza());
+      //One crust can be on many pizzas, but each pizza can only have one crust
+    builder.Entity<Crust>().HasMany(c => c.Pizzas).WithOne(p => p.Crust);
+      builder.Entity<Pizza>().HasMany(p => p.Toppings).WithOne(pt => pt.Pizza).HasForeignKey(pt => pt.PizzaId);
+      builder.Entity<Size>().HasMany(s => s.Pizzas).WithOne(p => p.Size);
+      builder.Entity<Topping>().HasMany(t => t.PizzaToppings).WithOne(pt => pt.Topping).HasForeignKey(pt => pt.ToppingId);
 
       //Defines all the crust
       builder.Entity<Crust>().HasData(new Crust[]

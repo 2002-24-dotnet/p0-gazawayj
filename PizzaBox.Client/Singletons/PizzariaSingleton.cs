@@ -8,7 +8,7 @@ namespace PizzaBox.Domain.Singleton
   public class PizzariaSingleton
   {
     private static readonly PizzariaSingleton _ps = new PizzariaSingleton();
-    public PizzariaSingleton Instance
+    public static PizzariaSingleton Instance
     {
       get
       {
@@ -21,7 +21,7 @@ namespace PizzaBox.Domain.Singleton
     }
 
     private static readonly PizzaRepository _pr = new PizzaRepository();
-    public bool Post(Crust crust, Size size, List<Topping> toppings)
+    public bool Post(Crust crust, Size size, List<PizzaTopping> toppings)
     {
       var p = new Pizza()
       {
@@ -31,10 +31,15 @@ namespace PizzaBox.Domain.Singleton
       };
       return _pr.Post(p);
     }
-    public List<Pizza> Get(string user)
+    public List<Pizza> Get(long userId)
     {
       //TODO: Look at Fred's code to get rest of implementation
-      return _pr.Get().Where( p => p.Name == user).ToList();
+      return _pr.Get().Where( p => p.userId == userId).ToList();
+    }
+        public List<Pizza> Get()
+    {
+      //TODO: Look at Fred's code to get rest of implementation
+      return _pr.Get().ToList();
     }
   }
 }

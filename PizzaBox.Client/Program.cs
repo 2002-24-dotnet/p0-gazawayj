@@ -5,7 +5,7 @@ namespace PizzaBox.Client
 {
   internal class Program
   {
-    private static PizzariaSingleton _pr = new PizzariaSingleton();
+    private static readonly PizzariaSingleton _pr = PizzariaSingleton.Instance;
     private static void Main(string[] args)
     {
       //TODO: Ask for log in type

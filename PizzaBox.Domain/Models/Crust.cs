@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PizzaBox.Domain.Abstracts;
 
 namespace PizzaBox.Domain.Models
@@ -17,5 +18,6 @@ namespace PizzaBox.Domain.Models
     {
       CrustId = DateTime.Now.Ticks;
     }
+    public List<Pizza> Pizzas { get; set; }
   }
 }
