@@ -44,6 +44,7 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<PizzaTopping>().HasKey(pt => new { pt.PizzaId, pt.Id });
       //define primary key of entity type (table) pizza
       builder.Entity<Pizza>().HasKey(p => p.Id);
+      //TODO: Complete the connections for below entities
       builder.Entity<User>().HasKey(u => u.Id);
       builder.Entity<Order>().HasKey(o => o.Id);
       builder.Entity<Store>().HasKey(s => s.Id);
