@@ -35,6 +35,7 @@ namespace PizzaBox.Domain.Models
         get { return _password; }
         set { _password = value; }
     }
+    public string Address;
     public User()
     {
       Id = DateTime.Now.Ticks;

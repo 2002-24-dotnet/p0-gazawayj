@@ -9,6 +9,7 @@ namespace PizzaBox.Domain.Models
   {
     
     #region NAVIGATIONAL PROPERTIES
+    public Order Order { get; set; }
     private Crust _crust;
     public Crust Crust
     {

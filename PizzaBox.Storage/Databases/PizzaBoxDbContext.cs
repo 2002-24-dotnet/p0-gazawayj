@@ -42,6 +42,7 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<Size>().HasKey(s => s.Id);
       builder.Entity<Topping>().HasKey(t => t.Id);
       builder.Entity<PizzaTopping>().HasKey(pt => new { pt.PizzaId, pt.Id });
+      builder.Entity<OrderPizza>().HasKey(po => new { po.PizzaId, po.Id });
       //define primary key of entity type (table) pizza
       builder.Entity<Pizza>().HasKey(p => p.Id);
       //TODO: Complete the connections for below entities
@@ -54,6 +55,7 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<Pizza>().HasMany(p => p.Toppings).WithOne(pt => pt.Pizza).HasForeignKey(pt => pt.PizzaId);
       builder.Entity<Size>().HasMany(s => s.Pizzas).WithOne(p => p.Size);
       builder.Entity<Topping>().HasMany(t => t.PizzaToppings).WithOne(pt => pt.Topping).HasForeignKey(pt => pt.Id);
+      builder.Entity<Order>().HasMany(p => p.Pizzas).WithOne(o => o.Order).HasForeignKey(p => p.Id);
 
       //Defines all the crust
       builder.Entity<Crust>().HasData(new Crust[]

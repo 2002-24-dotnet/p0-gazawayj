@@ -3,50 +3,31 @@ namespace PizzaBox.Domain.Models
 {
   public class Order 
   {
-    private int _userID;
-    public int UserID
+    private long _customerId;
+    public long CustomerId
     {
-        get { return _userID; }
-        set { _userID = value; }
+        get { return _customerId; }
+        set { _customerId = value; }
     }
-    private int _storeID;
-    public int Id
+    private int _storeId;
+    public int StoreId
     {
-        get { return _storeID; }
-        set { _storeID = value; }
+        get { return _storeId; }
+        set { _storeId = value; }
     }
     
-    private int _orderID;
-    public int OrderID
+    private long _Id;
+    public long Id
     {
-        get { return _orderID; }
-        set { _orderID = value; }
+        get { return _Id; }
+        set { _Id = value; }
     }
-    /// <summary>
-    /// Get the pizzas from this order
-    /// </summary>
-    /// <returns>Container of ordered pizzas</returns>
-    public Dictionary<int, Pizza> GetPizzas()
+    private List<Pizza> _pizzas;
+    public List<Pizza> Pizzas
     {
-      //TODO: implement
-      return new Dictionary<int, Pizza>();
+        get { return _pizzas; }
+        set { _pizzas = value; }
     }
-    /// <summary>
-    /// Computes the cost of this order
-    /// </summary>
-    /// <returns>double representing the order cost</returns>
-    public double ComputeCost()
-    {
-      //TODO:
-      return 0;
-    }
-    /// <summary>
-    /// Checks if the order limit has been reached.abstract Run before adding another pizza
-    /// </summary>
-    /// <returns>A bool representing a state of being able to add to the order</returns>
-    public bool CheckOrderLimit()
-    {
-      return (ComputeCost() <= 250.00);
-    }
+    
   }
 }
