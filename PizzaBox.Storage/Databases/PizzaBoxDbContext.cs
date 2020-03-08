@@ -7,10 +7,27 @@ namespace PizzaBox.Storage.Databases
 {
   public class PizzaBoxDbContext : DbContext
   {
+
+    //Create a singleton of PizzaBoxDbContext so different entities don't
+    //conflict with eachother by having different contexts
+    private static readonly PizzaBoxDbContext _pbc = new PizzaBoxDbContext();
+
+    public static PizzaBoxDbContext Instance 
+    {
+      get
+      {
+        return _pbc;
+      }
+    }
+    
     public DbSet<Pizza> Pizza { get; set; }
     public DbSet<Size> Size { get; set; }
     public DbSet<Topping> Topping { get; set; }
     public DbSet<Crust> Crust { get; set; }
+    public DbSet<User> User { get; set; }
+    public DbSet<Order> Order { get; set; }
+    public DbSet<Store> Store { get; set; }
+
 
     //TODO: add user, order, and store
 
@@ -21,18 +38,21 @@ namespace PizzaBox.Storage.Databases
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-      builder.Entity<Crust>().HasKey(c => c.CrustId);
-      builder.Entity<Size>().HasKey(s => s.SizeId);
-      builder.Entity<Topping>().HasKey(t => t.ToppingId);
-      builder.Entity<PizzaTopping>().HasKey(pt => new { pt.PizzaId, pt.ToppingId });
+      builder.Entity<Crust>().HasKey(c => c.Id);
+      builder.Entity<Size>().HasKey(s => s.Id);
+      builder.Entity<Topping>().HasKey(t => t.Id);
+      builder.Entity<PizzaTopping>().HasKey(pt => new { pt.PizzaId, pt.Id });
       //define primary key of entity type (table) pizza
-      builder.Entity<Pizza>().HasKey(p => p.PizzaId);
+      builder.Entity<Pizza>().HasKey(p => p.Id);
+      builder.Entity<User>().HasKey(u => u.Id);
+      builder.Entity<Order>().HasKey(o => o.Id);
+      builder.Entity<Store>().HasKey(s => s.Id);
 
       //One crust can be on many pizzas, but each pizza can only have one crust
-    builder.Entity<Crust>().HasMany(c => c.Pizzas).WithOne(p => p.Crust);
+      builder.Entity<Crust>().HasMany(c => c.Pizzas).WithOne(p => p.Crust);
       builder.Entity<Pizza>().HasMany(p => p.Toppings).WithOne(pt => pt.Pizza).HasForeignKey(pt => pt.PizzaId);
       builder.Entity<Size>().HasMany(s => s.Pizzas).WithOne(p => p.Size);
-      builder.Entity<Topping>().HasMany(t => t.PizzaToppings).WithOne(pt => pt.Topping).HasForeignKey(pt => pt.ToppingId);
+      builder.Entity<Topping>().HasMany(t => t.PizzaToppings).WithOne(pt => pt.Topping).HasForeignKey(pt => pt.Id);
 
       //Defines all the crust
       builder.Entity<Crust>().HasData(new Crust[]

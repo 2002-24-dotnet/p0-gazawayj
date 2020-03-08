@@ -5,9 +5,8 @@ using PizzaBox.Domain.Abstracts;
 
 namespace PizzaBox.Domain.Models
 {
-  public class Pizza : APizza
+  public class Pizza : ADescribePizza
   {
-    public long PizzaId { get; set; }
     
     #region NAVIGATIONAL PROPERTIES
     private Crust _crust;
@@ -23,7 +22,7 @@ namespace PizzaBox.Domain.Models
         set { _size = value; }
     }
     private List<PizzaTopping> _toppings;
-    public long userId;
+    public long UserId;
 
     public List<PizzaTopping> Toppings
     {
@@ -32,7 +31,7 @@ namespace PizzaBox.Domain.Models
     }
     #endregion
 
-        public decimal Price
+        public override decimal Price
     {
       get
       {
@@ -43,18 +42,10 @@ namespace PizzaBox.Domain.Models
         return Crust.Price + Size.Price + (Toppings.Sum( t => t.Topping.Price));
       }
     }
-    
-    public Pizza()
-    {
-      PizzaId = DateTime.Now.Ticks;
-      // Crust = new Crust(){ PizzaId = this.PizzaId };
-      // Size = new Size(){ PizzaId = this.PizzaId };
-      // Toppings = new List<Topping>() { new Topping(){ PizzaId = this.PizzaId } };
-    }
 
     public override string ToString()
     {
-      return $"{PizzaId} {Price} {Crust.Name ?? "N/A"} {Size.Name ?? "N/A"} {Toppings.ToString()}";
+      return $"{Id} {Price} {Crust.Name ?? "N/A"} {Size.Name ?? "N/A"} {Toppings.ToString()}";
     }
   }
 }

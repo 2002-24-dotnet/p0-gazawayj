@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain.Models;
@@ -21,7 +22,12 @@ namespace PizzaBox.Domain.Singleton
     }
 
     private static readonly PizzaRepository _pr = new PizzaRepository();
-    public bool Post(Crust crust, Size size, List<PizzaTopping> toppings)
+    private static readonly GenericRepository<Crust> _cr = new GenericRepository<Crust>();
+    private static readonly GenericRepository<Topping> _tr = new GenericRepository<Topping>();
+    private static readonly GenericRepository<Size> _sr = new GenericRepository<Size>();
+
+    //CREATE of CRUD
+    public bool CreatePizza(Crust crust, Size size, List<PizzaTopping> toppings)
     {
       var p = new Pizza()
       {
@@ -29,17 +35,32 @@ namespace PizzaBox.Domain.Singleton
         Size = size,
         Toppings = toppings
       };
-      return _pr.Post(p);
+      return _pr.Create(p);
     }
-    public List<Pizza> Get(long userId)
+    //READ of CRUD
+    public List<Pizza> GetAllPizzasForUser(long userId)
     {
-      //TODO: Look at Fred's code to get rest of implementation
-      return _pr.Get().Where( p => p.userId == userId).ToList();
+      return _pr.GetAllPizzas().Where(p => p.UserId == userId).ToList();
     }
-        public List<Pizza> Get()
+
+    internal List<Size> GetAllSizes()
     {
-      //TODO: Look at Fred's code to get rest of implementation
-      return _pr.Get().ToList();
+      return _sr.ReadAll().ToList();
+    }
+
+    internal List<Crust> GetAllCrusts()
+    {
+      return _cr.ReadAll().ToList();
+    }
+
+    public List<Pizza> GetAllPizzas()
+    {
+      return _pr.GetAllPizzas().ToList();
+    }
+    
+    public List<Topping> GetAllToppings()
+    {
+      return _tr.ReadAll().ToList();
     }
   }
 }

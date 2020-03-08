@@ -1,4 +1,5 @@
-﻿using PizzaBox.Domain.Singleton;
+﻿using System;
+using PizzaBox.Domain.Singleton;
 using PizzaBox.Storage.Repositories;
 
 namespace PizzaBox.Client
@@ -15,12 +16,44 @@ namespace PizzaBox.Client
       //TODO: Display options based on login type
       //TODO: Interact with storage to satisfy business logic
       GetAllPizzas();
+      GetAllToppings();
+      GetAllSizes();
+      GetAllCrusts();
+    }
+
+    private static void PostPizza()
+    {
+      //_pr.Post()
+    }
+
+    private static void GetAllToppings()
+    {
+      foreach (var t in _pr.GetAllToppings())
+      {
+        System.Console.WriteLine(t.Name);
+      }
+    }
+
+    private static void GetAllSizes()
+    {
+      foreach (var s in _pr.GetAllSizes())
+      {
+        System.Console.WriteLine(s.Name);
+      }
+    }
+
+    private static void GetAllCrusts()
+    {
+      foreach (var c in _pr.GetAllCrusts())
+      {
+        System.Console.WriteLine(c.Name);
+      }
     }
 
     private static void GetAllPizzas()
     {
       
-      foreach (var p in _pr.Get())
+      foreach (var p in _pr.GetAllPizzas())
       {
         System.Console.WriteLine(p);
       }

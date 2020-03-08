@@ -10,7 +10,7 @@ using PizzaBox.Storage.Databases;
 namespace PizzaBox.Storage.Migrations
 {
     [DbContext(typeof(PizzaBoxDbContext))]
-    [Migration("20200305211650_migration1")]
+    [Migration("20200308161316_migration1")]
     partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,45 +23,37 @@ namespace PizzaBox.Storage.Migrations
 
             modelBuilder.Entity("PizzaBox.Domain.Models.Crust", b =>
                 {
-                    b.Property<long>("CrustId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CrustType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("PizzaId")
-                        .HasColumnType("bigint");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("CrustId");
-
-                    b.HasIndex("PizzaId");
+                    b.HasKey("Id");
 
                     b.ToTable("Crust");
 
                     b.HasData(
                         new
                         {
-                            CrustId = 637190182094169893L,
+                            Id = 637192627959578321L,
                             Name = "Thin Crust",
                             Price = 2.00m
                         },
                         new
                         {
-                            CrustId = 637190182094223048L,
+                            Id = 637192627959627191L,
                             Name = "New York Style",
                             Price = 3.00m
                         },
                         new
                         {
-                            CrustId = 637190182094223162L,
+                            Id = 637192627959627290L,
                             Name = "Deep Dish",
                             Price = 4.00m
                         });
@@ -69,7 +61,7 @@ namespace PizzaBox.Storage.Migrations
 
             modelBuilder.Entity("PizzaBox.Domain.Models.Pizza", b =>
                 {
-                    b.Property<long>("PizzaId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -77,26 +69,42 @@ namespace PizzaBox.Storage.Migrations
                     b.Property<long?>("CrustId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<long?>("SizeId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ToppingId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("PizzaId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CrustId");
 
                     b.HasIndex("SizeId");
 
-                    b.HasIndex("ToppingId");
-
                     b.ToTable("Pizza");
+                });
+
+            modelBuilder.Entity("PizzaBox.Domain.Models.PizzaTopping", b =>
+                {
+                    b.Property<long>("PizzaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("PizzaId", "Id");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("PizzaTopping");
                 });
 
             modelBuilder.Entity("PizzaBox.Domain.Models.Size", b =>
                 {
-                    b.Property<long>("SizeId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -104,37 +112,29 @@ namespace PizzaBox.Storage.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("PizzaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("PizzaSize")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("SizeId");
-
-                    b.HasIndex("PizzaId");
+                    b.HasKey("Id");
 
                     b.ToTable("Size");
 
                     b.HasData(
                         new
                         {
-                            SizeId = 637190182094244019L,
+                            Id = 637192627959645301L,
                             Name = "Small",
                             Price = 10.00m
                         },
                         new
                         {
-                            SizeId = 637190182094244635L,
+                            Id = 637192627959645368L,
                             Name = "Medium",
                             Price = 12.00m
                         },
                         new
                         {
-                            SizeId = 637190182094244665L,
+                            Id = 637192627959645376L,
                             Name = "Large",
                             Price = 14.00m
                         });
@@ -142,7 +142,7 @@ namespace PizzaBox.Storage.Migrations
 
             modelBuilder.Entity("PizzaBox.Domain.Models.Topping", b =>
                 {
-                    b.Property<long>("ToppingId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -150,82 +150,58 @@ namespace PizzaBox.Storage.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("PizzaId")
-                        .HasColumnType("bigint");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Prices")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ToppingName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ToppingId");
-
-                    b.HasIndex("PizzaId");
+                    b.HasKey("Id");
 
                     b.ToTable("Topping");
 
                     b.HasData(
                         new
                         {
-                            ToppingId = 637190182094246103L,
+                            Id = 637192627959646864L,
                             Name = "Cheese",
-                            Price = 0.25m,
-                            Prices = 0m
+                            Price = 0.25m
                         },
                         new
                         {
-                            ToppingId = 637190182094246644L,
+                            Id = 637192627959646917L,
                             Name = "Pepperoni",
-                            Price = 0.75m,
-                            Prices = 0m
+                            Price = 0.75m
                         },
                         new
                         {
-                            ToppingId = 637190182094246678L,
+                            Id = 637192627959646924L,
                             Name = "Sauce",
-                            Price = 0.55m,
-                            Prices = 0m
+                            Price = 0.55m
                         });
-                });
-
-            modelBuilder.Entity("PizzaBox.Domain.Models.Crust", b =>
-                {
-                    b.HasOne("PizzaBox.Domain.Models.Pizza", "Pizza")
-                        .WithMany()
-                        .HasForeignKey("PizzaId");
                 });
 
             modelBuilder.Entity("PizzaBox.Domain.Models.Pizza", b =>
                 {
                     b.HasOne("PizzaBox.Domain.Models.Crust", "Crust")
-                        .WithMany()
+                        .WithMany("Pizzas")
                         .HasForeignKey("CrustId");
 
                     b.HasOne("PizzaBox.Domain.Models.Size", "Size")
-                        .WithMany()
+                        .WithMany("Pizzas")
                         .HasForeignKey("SizeId");
-
-                    b.HasOne("PizzaBox.Domain.Models.Topping", null)
-                        .WithMany()
-                        .HasForeignKey("ToppingId");
                 });
 
-            modelBuilder.Entity("PizzaBox.Domain.Models.Size", b =>
+            modelBuilder.Entity("PizzaBox.Domain.Models.PizzaTopping", b =>
                 {
-                    b.HasOne("PizzaBox.Domain.Models.Pizza", "Pizza")
-                        .WithMany()
-                        .HasForeignKey("PizzaId");
-                });
+                    b.HasOne("PizzaBox.Domain.Models.Topping", "Topping")
+                        .WithMany("PizzaToppings")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("PizzaBox.Domain.Models.Topping", b =>
-                {
                     b.HasOne("PizzaBox.Domain.Models.Pizza", "Pizza")
                         .WithMany("Toppings")
-                        .HasForeignKey("PizzaId");
+                        .HasForeignKey("PizzaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

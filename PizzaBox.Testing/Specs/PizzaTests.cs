@@ -11,7 +11,7 @@ namespace PizzaBox.Testing.Specs
       //ASSEMBLE
       var sut = new PizzaRepository();
       //ACT
-      var actual = sut.Get();
+      var actual = sut.GetAllPizzas();
       //ASSERT
       Assert.True(actual != null);
       Assert.True(actual.Count >= 0);

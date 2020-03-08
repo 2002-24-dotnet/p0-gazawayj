@@ -10,7 +10,7 @@ namespace PizzaBox.Domain.Models
         set { _userID = value; }
     }
     private int _storeID;
-    public int StoreID
+    public int Id
     {
         get { return _storeID; }
         set { _storeID = value; }

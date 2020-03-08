@@ -3,11 +3,18 @@ namespace PizzaBox.Domain.Models
 {
   public class Store
   {
-    private int _storeID;
-    public int StoreID
+    private string _storeName;
+    public string StoreName
     {
-        get { return _storeID; }
-        set { _storeID = value; }
+        get { return _storeName; }
+        set { _storeName = value; }
+    }
+    
+    private int _id;
+    public int Id
+    {
+        get { return _id; }
+        set { _id = value; }
     }
     private string _address;
     public string Address
