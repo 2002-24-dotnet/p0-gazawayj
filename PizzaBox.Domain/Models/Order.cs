@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 namespace PizzaBox.Domain.Models
 {
@@ -39,6 +40,10 @@ namespace PizzaBox.Domain.Models
         }
         return sum;
       }
+    }
+    public Order()
+    {
+      Id = DateTime.Now.Ticks;
     }
   }
 }

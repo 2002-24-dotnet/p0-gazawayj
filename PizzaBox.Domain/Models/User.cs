@@ -17,8 +17,8 @@ namespace PizzaBox.Domain.Models
         get { return _name; }
         set { _name = value; }
     }
-    private int _phone;
-    public int Phone
+    private string _phone;
+    public string Phone
     {
         get { return _phone; }
         set { _phone = value; }
@@ -35,10 +35,23 @@ namespace PizzaBox.Domain.Models
         get { return _password; }
         set { _password = value; }
     }
-    public string Address;
+    private string _address;
+    public string Address
+    {
+        get { return _address; }
+        set { _address = value; }
+    }
+    
     public User()
     {
       Id = DateTime.Now.Ticks;
     }
+    private bool _isStore;
+    public bool IsStore
+    {
+        get { return _isStore; }
+        set { _isStore = value; }
+    }
+    
   }
 }

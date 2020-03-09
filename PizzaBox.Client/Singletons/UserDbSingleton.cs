@@ -82,5 +82,14 @@ namespace PizzaBox.Client.Singleton
       }
       return "Pizzas sold: " + numLarge + " Large, " + numMed + " Medium, " + numSmall + " Small. Total sales: " + totalSales;
     }
+
+    internal bool CreateUserLogin(string userName, string password, string fullName, string address, string phone)
+    {
+      User newUser = new User()
+      {
+        Login = userName, Password = password, Name = fullName, Phone = phone, Address = address, IsStore = false
+      };
+      return _ur.Create(newUser);
+    }
   }
 }

@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using PizzaBox.Client.Singleton;
 using PizzaBox.Domain.Models;
 
-namespace PizzaBox.Domain.Controller
+namespace PizzaBox.Client.Controllers
 {
   public class UserController
   {
@@ -57,6 +58,11 @@ namespace PizzaBox.Domain.Controller
     public string GetStoreSales(long id)
     {
       return _pr.GetStoreSales(id);
+    }
+
+    internal bool CreateUserAccount(string userName, string password, string fullName, string address, string phone)
+    {
+      return _pr.CreateUserLogin(userName, password, fullName, address, phone);
     }
   }
 }
