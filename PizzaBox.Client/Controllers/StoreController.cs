@@ -24,9 +24,9 @@ namespace PizzaBox.Client.Controllers
       return _ps.GetAllToppings();
     }
 
-    internal List<Order> GetFullOrderHistory(long userId)
+    internal List<Order> GetFullOrderHistory(long storeId)
     {
-      return _us.GetStoreOrderHistory(userId);
+      return _us.GetStoreOrderHistory(storeId);
     }
 
     internal List<User> GetAllCustomersForStore(long id)

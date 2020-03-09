@@ -22,7 +22,17 @@ namespace PizzaBox.Client
         System.Console.WriteLine("Please select an option:");
         System.Console.WriteLine("1. Log in." + Environment.NewLine + "2. Create User.");
         int selection = Int32.Parse(System.Console.ReadLine());
-        if (selection == 1) { loggedIn = DoLoginRoutine(); }
+        if (selection == 1) 
+        {
+          while (!loggedIn)
+          {
+            loggedIn = DoLoginRoutine();
+            if (!loggedIn)
+            {
+              System.Console.WriteLine("Error with login, please try again.");
+            }
+          }
+        }
         else if (selection == 2) { CreateUser(); }
         else { System.Console.WriteLine("Sorry, I didn't understand that."); }
       }
@@ -70,6 +80,7 @@ namespace PizzaBox.Client
       {
         foreach(Pizza p in o.Pizzas)
         {
+          //TODO: Remove the hard coded sizes
           if (p.Size.Name.Equals("Small"))
           {
             small++;
@@ -99,7 +110,7 @@ namespace PizzaBox.Client
       int selection = Int32.Parse(System.Console.ReadLine());
       if (selection == 1)
       {
-        foreach(Order o in _sc.GetFullOrderHistory(_user.Id))
+        foreach(Order o in _sc.GetFullOrderHistory(_store.StoreId))
         {
           System.Console.WriteLine(o);
         }
@@ -146,6 +157,7 @@ namespace PizzaBox.Client
     {
       Order newOrder = new Order();
       long storeID = GetStoreSelection();
+      _store = _uc.SetStore(storeID);
       newOrder.CustomerId = _user.Id;
       newOrder.StoreId = _store.StoreId;
       bool createOrder;
