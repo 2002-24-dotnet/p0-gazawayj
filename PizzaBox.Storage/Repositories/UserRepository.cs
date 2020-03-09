@@ -60,7 +60,10 @@ namespace PizzaBox.Storage.Repositories
     {
       return _db.Store.ToList();
     }
-
+    public Store FindStore(string address)
+    {
+      return _db.Store.SingleOrDefault(s => s.Address.Equals(address));
+    }
     public Store FindStore(long id)
     {
       return _db.Store.SingleOrDefault(s => s.StoreId == id);

@@ -53,7 +53,10 @@ namespace PizzaBox.Client.Singleton
     {
       return _ur.ReadUser(Id);
     }
-
+    public Store GetStore(string address)
+    {
+      return _ur.FindStore(address);
+    }
     public Store GetStore(long id)
     {
       return _ur.FindStore(id);

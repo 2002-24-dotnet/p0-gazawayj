@@ -61,7 +61,7 @@ namespace PizzaBox.Client.Controllers
       return _pr.GetStoreSales(id);
     }
 
-    internal bool CreateUserAccount(string userName, string password, string fullName, string address, string phone)
+    internal bool CreateUserAccount(string userName, string password, string fullName, string address, string phone, bool v)
     {
       return _pr.CreateUserLogin(userName, password, fullName, address, phone);
     }

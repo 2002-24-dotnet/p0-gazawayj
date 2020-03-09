@@ -50,7 +50,7 @@ namespace PizzaBox.Domain.Models
     }
     public override string ToString()
     {
-      return OrderDateTime + " " + PizzasString();
+      return " " + PizzasString();
     }
 
     private string PizzasString()
@@ -65,7 +65,8 @@ namespace PizzaBox.Domain.Models
 
     public Order()
     {
-      //Id = DateTime.Now.Ticks;
+      OrderId = DateTime.Now.Ticks;
+      Pizzas = new List<Pizza>();
     }
   }
 }

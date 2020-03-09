@@ -46,7 +46,7 @@ namespace PizzaBox.Domain.Models
     
     public User()
     {
-      //Id = DateTime.Now.Ticks;
+      Id = DateTime.Now.Ticks;
     }
     private bool _isStore;
     public bool IsStore

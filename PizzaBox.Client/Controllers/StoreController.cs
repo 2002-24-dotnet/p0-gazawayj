@@ -33,5 +33,10 @@ namespace PizzaBox.Client.Controllers
     {
       return _us.GetAllClientUsersForStore(id);
     }
+
+    internal Store GetStore(string address)
+    {
+      return _us.GetStore(address);
+    }
   }
 }

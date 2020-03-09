@@ -39,19 +39,19 @@ namespace PizzaBox.Storage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 637193591486547947L,
+                            Id = 637193664205782211L,
                             Name = "Thin Crust",
                             Price = 2.00m
                         },
                         new
                         {
-                            Id = 637193591486549515L,
+                            Id = 637193664205784624L,
                             Name = "New York Style",
                             Price = 3.00m
                         },
                         new
                         {
-                            Id = 637193591486549574L,
+                            Id = 637193664205784695L,
                             Name = "Deep Dish",
                             Price = 4.00m
                         });
@@ -60,9 +60,7 @@ namespace PizzaBox.Storage.Migrations
             modelBuilder.Entity("PizzaBox.Domain.Models.Order", b =>
                 {
                     b.Property<long>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
@@ -99,21 +97,13 @@ namespace PizzaBox.Storage.Migrations
             modelBuilder.Entity("PizzaBox.Domain.Models.Pizza", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("CrustId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<long?>("OrderId")
                         .HasColumnType("bigint");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<long?>("SizeId")
                         .HasColumnType("bigint");
@@ -164,19 +154,19 @@ namespace PizzaBox.Storage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 637193591486550941L,
+                            Id = 637193664205786655L,
                             Name = "Small",
                             Price = 10.00m
                         },
                         new
                         {
-                            Id = 637193591486550990L,
+                            Id = 637193664205787314L,
                             Name = "Medium",
                             Price = 12.00m
                         },
                         new
                         {
-                            Id = 637193591486550997L,
+                            Id = 637193664205787348L,
                             Name = "Large",
                             Price = 14.00m
                         });
@@ -205,14 +195,14 @@ namespace PizzaBox.Storage.Migrations
                     b.HasData(
                         new
                         {
-                            StoreId = 637193591486484061L,
+                            StoreId = 637193664205778065L,
                             Address = "501 Main St, Fake_City, Fake_State, 90210",
                             Phone = "1900pizzapls",
                             StoreName = "Jim's Pizza #1"
                         },
                         new
                         {
-                            StoreId = 637193591486526324L,
+                            StoreId = 637193664205780054L,
                             Address = "2435 W 57th Ave, Fake_City, Fake_State, 90210",
                             Phone = "1900pizzanow",
                             StoreName = "Jim's Pizza #32"
@@ -239,19 +229,19 @@ namespace PizzaBox.Storage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 637193591486552007L,
+                            Id = 637193664205788739L,
                             Name = "Cheese",
                             Price = 0.25m
                         },
                         new
                         {
-                            Id = 637193591486552057L,
+                            Id = 637193664205788788L,
                             Name = "Pepperoni",
                             Price = 0.75m
                         },
                         new
                         {
-                            Id = 637193591486552063L,
+                            Id = 637193664205788794L,
                             Name = "Sauce",
                             Price = 0.55m
                         });
@@ -260,9 +250,7 @@ namespace PizzaBox.Storage.Migrations
             modelBuilder.Entity("PizzaBox.Domain.Models.User", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -285,6 +273,28 @@ namespace PizzaBox.Storage.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 637193664205755802L,
+                            Address = "501 Main St, Fake_City, Fake_State, 90210",
+                            IsStore = true,
+                            Login = "store1",
+                            Name = "Store_1_admin",
+                            Password = "1",
+                            Phone = "1900pizzanow"
+                        },
+                        new
+                        {
+                            Id = 637193664205758795L,
+                            Address = "2435 W 57th Ave, Fake_City, Fake_State, 90210",
+                            IsStore = true,
+                            Login = "store32",
+                            Name = "Store_32_admin",
+                            Password = "1",
+                            Phone = "1900pizzanow"
+                        });
                 });
 
             modelBuilder.Entity("PizzaBox.Domain.Models.OrderPizza", b =>

@@ -2,7 +2,7 @@
 
 namespace PizzaBox.Storage.Migrations
 {
-    public partial class migration : Migration
+    public partial class migration2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,8 +24,7 @@ namespace PizzaBox.Storage.Migrations
                 name: "Order",
                 columns: table => new
                 {
-                    OrderId = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderId = table.Column<long>(nullable: false),
                     CustomerId = table.Column<long>(nullable: false),
                     OrderDateTime = table.Column<string>(nullable: true),
                     StoreId = table.Column<long>(nullable: false)
@@ -82,8 +81,7 @@ namespace PizzaBox.Storage.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     Login = table.Column<string>(nullable: true),
@@ -100,13 +98,10 @@ namespace PizzaBox.Storage.Migrations
                 name: "Pizza",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false),
                     OrderId = table.Column<long>(nullable: true),
                     CrustId = table.Column<long>(nullable: true),
-                    SizeId = table.Column<long>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false)
+                    SizeId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -185,9 +180,9 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 637193588579145321L, "Thin Crust", 2.00m },
-                    { 637193588579147128L, "New York Style", 3.00m },
-                    { 637193588579147202L, "Deep Dish", 4.00m }
+                    { 637193664205782211L, "Thin Crust", 2.00m },
+                    { 637193664205784624L, "New York Style", 3.00m },
+                    { 637193664205784695L, "Deep Dish", 4.00m }
                 });
 
             migrationBuilder.InsertData(
@@ -195,9 +190,9 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 637193588579148213L, "Small", 10.00m },
-                    { 637193588579148266L, "Medium", 12.00m },
-                    { 637193588579148273L, "Large", 14.00m }
+                    { 637193664205786655L, "Small", 10.00m },
+                    { 637193664205787314L, "Medium", 12.00m },
+                    { 637193664205787348L, "Large", 14.00m }
                 });
 
             migrationBuilder.InsertData(
@@ -205,8 +200,8 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "StoreId", "Address", "Phone", "StoreName" },
                 values: new object[,]
                 {
-                    { 637193588579072962L, "501 Main St, Fake_City, Fake_State, 90210", "1900pizzapls", "Jim's Pizza #1" },
-                    { 637193588579121430L, "2435 W 57th Ave, Fake_City, Fake_State, 90210", "1900pizzanow", "Jim's Pizza #32" }
+                    { 637193664205778065L, "501 Main St, Fake_City, Fake_State, 90210", "1900pizzapls", "Jim's Pizza #1" },
+                    { 637193664205780054L, "2435 W 57th Ave, Fake_City, Fake_State, 90210", "1900pizzanow", "Jim's Pizza #32" }
                 });
 
             migrationBuilder.InsertData(
@@ -214,9 +209,18 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 637193588579149132L, "Cheese", 0.25m },
-                    { 637193588579149179L, "Pepperoni", 0.75m },
-                    { 637193588579149186L, "Sauce", 0.55m }
+                    { 637193664205788739L, "Cheese", 0.25m },
+                    { 637193664205788788L, "Pepperoni", 0.75m },
+                    { 637193664205788794L, "Sauce", 0.55m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Address", "IsStore", "Login", "Name", "Password", "Phone" },
+                values: new object[,]
+                {
+                    { 637193664205755802L, "501 Main St, Fake_City, Fake_State, 90210", true, "store1", "Store_1_admin", "1", "1900pizzanow" },
+                    { 637193664205758795L, "2435 W 57th Ave, Fake_City, Fake_State, 90210", true, "store32", "Store_32_admin", "1", "1900pizzanow" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -45,9 +45,11 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<OrderPizza>().HasKey(po => new { po.PizzaId, po.Id });
       //define primary key of entity type (table) pizza
       builder.Entity<Pizza>().HasKey(p => p.Id);
-      //TODO: Complete the connections for below entities
+      builder.Entity<Pizza>().Property(p => p.Id).ValueGeneratedNever();
       builder.Entity<User>().HasKey(u => u.Id);
+      builder.Entity<User>().Property(p => p.Id).ValueGeneratedNever();
       builder.Entity<Order>().HasKey(o => o.OrderId);
+      builder.Entity<Order>().Property(p => p.OrderId).ValueGeneratedNever();
       builder.Entity<Store>().HasKey(s => s.StoreId);
 
 
@@ -58,6 +60,14 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<Topping>().HasMany(t => t.PizzaToppings).WithOne(pt => pt.Topping).HasForeignKey(pt => pt.Id);
       //builder.Entity<Order>().HasMany(p => p.Pizzas).WithOne(o => o.Order).HasForeignKey(p => p.Id);
 
+      //Define default Store admin accounts
+      builder.Entity<User>().HasData(new User[]
+      {
+        new User() { Id = DateTime.Now.Ticks, Name = "Store_1_admin", Phone = "1900pizzanow", Login = "store1", Password = "1", Address = "501 Main St, Fake_City, Fake_State, 90210", IsStore = true },
+        new User() { Id = DateTime.Now.Ticks, Name = "Store_32_admin", Login = "store32", Password = "1", Address = "2435 W 57th Ave, Fake_City, Fake_State, 90210", Phone = "1900pizzanow", IsStore = true }
+      });
+
+      //Define default Stores
       builder.Entity<Store>().HasData(new Store[]
       {
         new Store() { StoreName = "Jim's Pizza #1", Address = "501 Main St, Fake_City, Fake_State, 90210", Phone = "1900pizzapls" },

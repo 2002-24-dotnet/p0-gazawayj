@@ -5,7 +5,7 @@ using PizzaBox.Domain.Abstracts;
 
 namespace PizzaBox.Domain.Models
 {
-  public class Pizza : ADescribePizza
+  public class Pizza 
   {
     
     #region NAVIGATIONAL PROPERTIES
@@ -31,8 +31,8 @@ namespace PizzaBox.Domain.Models
         set { _toppings = value; }
     }
     #endregion
-
-        public override decimal Price
+        public long Id { get; set; }
+        public decimal Price
     {
       get
       {
@@ -46,7 +46,22 @@ namespace PizzaBox.Domain.Models
 
     public override string ToString()
     {
-      return $"{Id} {Price} {Crust.Name ?? "N/A"} {Size.Name ?? "N/A"} {Toppings.ToString()}";
+      return $"{Price} {Crust.Name ?? "N/A"} {Size.Name ?? "N/A"}" + GetToppings();
+    }
+
+    private string GetToppings()
+    {
+      string temp = ": Toppings: ";
+      foreach (PizzaTopping pt in this.Toppings)
+      {
+        temp += pt.Topping.Name + " ";
+      }
+      return temp;
+    }
+
+    public Pizza()
+    {
+      Id = DateTime.Now.Ticks;
     }
   }
 }

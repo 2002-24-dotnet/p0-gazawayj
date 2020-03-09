@@ -16,5 +16,10 @@ namespace PizzaBox.Client.Controllers
     {
       _ps.CreatePizza(userPizza);
     }
+
+    internal void RemoveOrder(Order newOrder)
+    {
+      _ps.DeleteOrder(newOrder);
+    }
   }
 }

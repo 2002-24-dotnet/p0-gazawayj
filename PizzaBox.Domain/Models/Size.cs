@@ -10,6 +10,7 @@ namespace PizzaBox.Domain.Models
     public Size()
     {
       Id = DateTime.Now.Ticks;
+      Pizzas = new List<Pizza>();
     }
   }
 }

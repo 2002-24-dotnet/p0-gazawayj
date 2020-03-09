@@ -21,6 +21,8 @@ namespace PizzaBox.Client.Singleton
     }
 
     private static readonly PizzaRepository _pr = new PizzaRepository();
+
+
     private static readonly OrderRepository _or = new OrderRepository();
     private static readonly GenericRepository<Crust> _cr = new GenericRepository<Crust>();
     private static readonly GenericRepository<Topping> _tr = new GenericRepository<Topping>();
@@ -69,6 +71,10 @@ namespace PizzaBox.Client.Singleton
     internal void CreateOrder(Order newOrder)
     {
       _or.Create(newOrder);
+    }
+        internal void DeleteOrder(Order newOrder)
+    {
+      _or.Delete(newOrder);
     }
   }
 }

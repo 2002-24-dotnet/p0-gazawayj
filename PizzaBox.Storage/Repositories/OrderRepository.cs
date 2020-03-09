@@ -20,5 +20,10 @@ namespace PizzaBox.Storage.Repositories
     {
       return _db.Order.ToList();
     }
+
+    public void Delete(Order newOrder)
+    {
+      _db.Order.Remove(newOrder);
+    }
   }
 }

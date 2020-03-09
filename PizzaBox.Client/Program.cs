@@ -44,6 +44,7 @@ namespace PizzaBox.Client
       }
       while (stillUsing && _user.IsStore)
       {
+        _store = _sc.GetStore(_user.Address);
         System.Console.WriteLine("Please select an option: " + Environment.NewLine + "1. See store order history.");
         System.Console.WriteLine("2. See sales." + Environment.NewLine + "3. Quit.");
         int selection = Int32.Parse(System.Console.ReadLine());
@@ -144,26 +145,23 @@ namespace PizzaBox.Client
     private static void CreateOrder()
     {
       Order newOrder = new Order();
-      newOrder.CustomerId = _user.Id;
-      if (_user.IsStore)
-      {
-         newOrder.StoreId = _store.StoreId;
-      }
       long storeID = GetStoreSelection();
+      newOrder.CustomerId = _user.Id;
+      newOrder.StoreId = _store.StoreId;
       bool createOrder;
-      (createOrder, newOrder.Pizzas) = GetPizzaSelections();
+      (createOrder, newOrder.Pizzas) = GetPizzaSelections(newOrder);
       if (createOrder)
       {
         System.Console.WriteLine("Creating new order.");
-        _oc.CreateOrder(newOrder);
       }
       else 
       {
         System.Console.WriteLine("Canceling out of order.");
+        _oc.RemoveOrder(newOrder);
       }
     }
 
-    private static (bool, List<Pizza>) GetPizzaSelections()
+    private static (bool, List<Pizza>) GetPizzaSelections(Order newOrder)
     {
       bool creatingMore = true;
       bool creatingOrder = false;
@@ -178,12 +176,16 @@ namespace PizzaBox.Client
         //Create a pizza to add to the order
         if (selection == 1)
         {
-          CreatePizzaFlow(createdPizzas);
+          CreatePizzaFlow(createdPizzas, newOrder);
+          creatingMore = true;
+          creatingOrder = true;
         }
         //Remove a pizza from the order
-        if (selection == 2)
+        else if (selection == 2)
         {
           RemovePizzaFlow(createdPizzas);
+          creatingMore = true;
+          creatingOrder = false;
         }
         else if (selection == 3)
         {
@@ -215,7 +217,7 @@ namespace PizzaBox.Client
         System.Console.WriteLine(p);
       }
       System.Console.WriteLine("____________________________");
-      System.Console.WriteLine("Total cost of order: " + sum);
+      System.Console.WriteLine("Total cost of order: " + sum + Environment.NewLine);
     }
 
     private static void RemovePizzaFlow(List<Pizza> createdPizzas)
@@ -228,7 +230,7 @@ namespace PizzaBox.Client
         counter++;
       }
       int selection = Int32.Parse(System.Console.ReadLine());
-      createdPizzas.Remove(createdPizzas.ElementAt(selection));
+      createdPizzas.Remove(createdPizzas.ElementAt(selection-1));
       System.Console.WriteLine("Pizza removed.");
     }
 
@@ -243,8 +245,9 @@ namespace PizzaBox.Client
         counter++;
       }
       int selection = Int32.Parse(System.Console.ReadLine());
-      _uc.SetStore(stores.ElementAt(selection).StoreId);
-      return stores.ElementAt(selection).StoreId;
+      _uc.SetStore(stores.ElementAt(selection-1).StoreId);
+      _store = stores.ElementAt(selection-1);
+      return stores.ElementAt(selection-1).StoreId;
     }
 
     private static void CreateUser()
@@ -262,7 +265,7 @@ namespace PizzaBox.Client
         string address = System.Console.ReadLine();
         System.Console.WriteLine("Please type in your phone number:");
         string phone = System.Console.ReadLine();
-        goodNewUser = _uc.CreateUserAccount(userName, password, fullName, address, phone);
+        goodNewUser = _uc.CreateUserAccount(userName, password, fullName, address, phone, false);
         if (!goodNewUser) { System.Console.WriteLine("User info not unique, please try again."); }
         else { System.Console.WriteLine("Creating your account. You will be asked to log in."); }
       }
@@ -275,14 +278,10 @@ namespace PizzaBox.Client
       System.Console.WriteLine("Please insert your password:");
       string password = System.Console.ReadLine();
       _user = _uc.LogIn(userName, password);
-      if (_user.IsStore)
-      {
-        _store = _uc.SetStore(_user.Id);
-      }
       return (_user != null);
     }
 
-    private static void CreatePizzaFlow(List<Pizza> createdPizzas)
+    private static void CreatePizzaFlow(List<Pizza> createdPizzas, Order newOrder)
     {
       System.Console.WriteLine("Let's create a pizza!" + Environment.NewLine + "What size pizza would you like?");
       List<Size> sizes = _sc.GetAvailableSizes();
@@ -293,7 +292,7 @@ namespace PizzaBox.Client
         counter++;
       }
       int selection = Int32.Parse(System.Console.ReadLine());
-      Size selectedSize = sizes.ElementAt(selection);
+      Size selectedSize = sizes.ElementAt(selection-1);
       counter = 1;
       System.Console.WriteLine("What type of crust would you like?");
       List<Crust> crusts = _sc.GetAvailableCrusts();
@@ -303,7 +302,7 @@ namespace PizzaBox.Client
         counter++;
       }
       selection = Int32.Parse(System.Console.ReadLine());
-      Crust selectedCrust = crusts.ElementAt(selection);
+      Crust selectedCrust = crusts.ElementAt(selection-1);
       counter = 1;
       bool choosingToppings = true;
       List<Topping> availableToppings = _sc.GetAvailableToppings();
@@ -312,6 +311,7 @@ namespace PizzaBox.Client
       {
         System.Console.WriteLine("What topping would you like to add?");
         System.Console.WriteLine("0. No more toppings.");
+        counter = 1;
         foreach (Topping t in availableToppings)
         {
           System.Console.WriteLine(counter + ". " + t.Name);
@@ -321,12 +321,11 @@ namespace PizzaBox.Client
         if (selection == 0)
         {
           choosingToppings = false;
-          System.Console.WriteLine("Adding pizza to order if valid");
         }
         else
         {
-          selectedToppings.Add(availableToppings.ElementAt(selection));
-          availableToppings.Remove(availableToppings.ElementAt(selection));
+          selectedToppings.Add(availableToppings.ElementAt(selection-1));
+          availableToppings.Remove(availableToppings.ElementAt(selection-1));
         }
       }
       List<PizzaTopping> pizzaToppingList = new List<PizzaTopping>();
@@ -341,9 +340,18 @@ namespace PizzaBox.Client
           Topping = t
         });
       }
+      userPizza.UserId = _user.Id;
       userPizza.Crust = selectedCrust;
       userPizza.Size = selectedSize;
       userPizza.Toppings = pizzaToppingList;
+      //~!@~!@~!@~!@~!@~!@~!@~!@~!@~!@~!@~!@~!@~!@~!@
+      //        SETTING ORDER. MIGHT NEED TO MOVE UP
+      //!@#!@#!@#!@#!@#!@#!@#!@#!@#!@#!#!@#!@#!@#!#!@
+      userPizza.Order = newOrder;
+      userPizza.Crust.Pizzas.Add(userPizza);
+      userPizza.Size.Pizzas.Add(userPizza);
+      userPizza.Order.StoreId = _store.StoreId;
+      userPizza.Order.Pizzas.Add(userPizza);
       createdPizzas.Add(userPizza);
       _oc.CreatePizza(userPizza);
     }
