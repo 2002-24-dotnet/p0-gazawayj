@@ -9,6 +9,8 @@ namespace PizzaBox.Client
     private static readonly PizzariaSingleton _pr = PizzariaSingleton.Instance;
     private static void Main(string[] args)
     {
+      System.Console.WriteLine("Type in your username please:");
+      string user = System.Console.ReadLine();
       //TODO: Ask for log in type
       //TODO: Ask for user name and password
       //TODO: Create connection to storage
