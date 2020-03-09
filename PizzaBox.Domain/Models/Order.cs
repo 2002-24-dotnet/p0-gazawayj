@@ -10,18 +10,25 @@ namespace PizzaBox.Domain.Models
         get { return _customerId; }
         set { _customerId = value; }
     }
-    private int _storeId;
-    public int StoreId
+    private string _orderDateTime;
+    public string OrderDateTime
+    {
+        get { return _orderDateTime; }
+        set { _orderDateTime = value; }
+    }
+    
+    private long _storeId;
+    public long StoreId
     {
         get { return _storeId; }
         set { _storeId = value; }
     }
     
-    private long _Id;
-    public long Id
+    private long _orderId;
+    public long OrderId
     {
-        get { return _Id; }
-        set { _Id = value; }
+        get { return _orderId; }
+        set { _orderId = value; }
     }
     private List<Pizza> _pizzas;
     public List<Pizza> Pizzas
@@ -41,9 +48,24 @@ namespace PizzaBox.Domain.Models
         return sum;
       }
     }
+    public override string ToString()
+    {
+      return OrderDateTime + " " + PizzasString();
+    }
+
+    private string PizzasString()
+    {
+      string temp = "";
+      foreach(Pizza p in Pizzas)
+      {
+        temp += '\t' + (p + Environment.NewLine);
+      }
+      return temp;
+    }
+
     public Order()
     {
-      Id = DateTime.Now.Ticks;
+      //Id = DateTime.Now.Ticks;
     }
   }
 }

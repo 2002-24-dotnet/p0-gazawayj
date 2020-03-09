@@ -45,9 +45,10 @@ namespace PizzaBox.Client.Controllers
       return _pr.GetStores();
     }
 
-    public void SetStore(long id)
+    public Store SetStore(long id)
     {
       UserStore = _pr.GetStore(id);
+      return UserStore;
     }
 
     public List<Order> ViewStoreOrderHistory(long id)

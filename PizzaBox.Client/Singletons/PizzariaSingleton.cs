@@ -4,7 +4,7 @@ using System.Linq;
 using PizzaBox.Domain.Models;
 using PizzaBox.Storage.Repositories;
 
-namespace PizzaBox.Domain.Singleton
+namespace PizzaBox.Client.Singleton
 {
   public class PizzariaSingleton
   {
@@ -16,12 +16,12 @@ namespace PizzaBox.Domain.Singleton
         return _ps;
       }
     }
-
     private PizzariaSingleton()
     {
     }
 
     private static readonly PizzaRepository _pr = new PizzaRepository();
+    private static readonly OrderRepository _or = new OrderRepository();
     private static readonly GenericRepository<Crust> _cr = new GenericRepository<Crust>();
     private static readonly GenericRepository<Topping> _tr = new GenericRepository<Topping>();
     private static readonly GenericRepository<Size> _sr = new GenericRepository<Size>();
@@ -36,6 +36,10 @@ namespace PizzaBox.Domain.Singleton
         Toppings = toppings
       };
       return _pr.Create(p);
+    }
+    internal bool CreatePizza(Pizza userPizza)
+    {
+      return _pr.Create(userPizza);
     }
     //READ of CRUD
     public List<Pizza> GetAllPizzasForUser(long userId)
@@ -57,10 +61,14 @@ namespace PizzaBox.Domain.Singleton
     {
       return _pr.GetAllPizzas().ToList();
     }
-    
+
     public List<Topping> GetAllToppings()
     {
       return _tr.ReadAll().ToList();
+    }
+    internal void CreateOrder(Order newOrder)
+    {
+      _or.Create(newOrder);
     }
   }
 }

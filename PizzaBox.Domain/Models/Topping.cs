@@ -7,5 +7,9 @@ namespace PizzaBox.Domain.Models
   public class Topping : ADescribePizza
   {
     public List<PizzaTopping> PizzaToppings { get; set; }
+    public Topping()
+    {
+      Id = DateTime.Now.Ticks;
+    }
   }
 }

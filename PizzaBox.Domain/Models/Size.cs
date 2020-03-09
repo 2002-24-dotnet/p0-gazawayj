@@ -7,5 +7,9 @@ namespace PizzaBox.Domain.Models
   public class Size : ADescribePizza
   {
     public List<Pizza> Pizzas { get; set; }
+    public Size()
+    {
+      Id = DateTime.Now.Ticks;
+    }
   }
 }

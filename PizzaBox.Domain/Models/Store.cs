@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 namespace PizzaBox.Domain.Models
 {
@@ -10,11 +11,11 @@ namespace PizzaBox.Domain.Models
         set { _storeName = value; }
     }
     
-    private int _id;
-    public int Id
+    private long _storeId;
+    public long StoreId
     {
-        get { return _id; }
-        set { _id = value; }
+        get { return _storeId; }
+        set { _storeId = value; }
     }
     private string _address;
     public string Address
@@ -22,38 +23,15 @@ namespace PizzaBox.Domain.Models
         get { return _address; }
         set { _address = value; }
     }
-    private int _phone;
-    public int Phone
+    private string _phone;
+    public string Phone
     {
         get { return _phone; }
         set { _phone = value; }
     }
-    /// <summary>
-    /// Get available sizes for this store
-    /// </summary>
-    /// <returns>A dictionary containing the sizes</returns>
-    public Dictionary<int, Size> GetSizes()
+    public Store()
     {
-      //TODO: implement
-      return new Dictionary<int, Size>();
-    }
-    /// <summary>
-    /// Get available crusts for this store
-    /// </summary>
-    /// <returns>A dictionary containing the sizes</returns>
-    public Dictionary<int, Crust> GetCrusts()
-    {
-      //TODO: implement
-      return new Dictionary<int, Crust>();
-    }
-    /// <summary>
-    /// Get available toppings for this store
-    /// </summary>
-    /// <returns>A dictionary containing the toppings</returns>
-    public Dictionary<int, Topping> GetToppings()
-    {
-      //TODO: implement
-      return new Dictionary<int, Topping>();
+      StoreId = DateTime.Now.Ticks;    
     }
   }
 }

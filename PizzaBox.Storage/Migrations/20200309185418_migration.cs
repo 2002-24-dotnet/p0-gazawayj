@@ -2,7 +2,7 @@
 
 namespace PizzaBox.Storage.Migrations
 {
-    public partial class migration1 : Migration
+    public partial class migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,14 +24,15 @@ namespace PizzaBox.Storage.Migrations
                 name: "Order",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    OrderId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<long>(nullable: false),
-                    StoreId = table.Column<int>(nullable: false)
+                    OrderDateTime = table.Column<string>(nullable: true),
+                    StoreId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Order", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,15 +53,15 @@ namespace PizzaBox.Storage.Migrations
                 name: "Store",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    StoreId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StoreName = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    Phone = table.Column<int>(nullable: false)
+                    Phone = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Store", x => x.Id);
+                    table.PrimaryKey("PK_Store", x => x.StoreId);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,9 +85,11 @@ namespace PizzaBox.Storage.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
-                    Phone = table.Column<int>(nullable: false),
+                    Phone = table.Column<string>(nullable: true),
                     Login = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true)
+                    Password = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    IsStore = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,8 +100,10 @@ namespace PizzaBox.Storage.Migrations
                 name: "Pizza",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
+                    OrderId = table.Column<long>(nullable: true),
                     CrustId = table.Column<long>(nullable: true),
                     SizeId = table.Column<long>(nullable: true),
                     Price = table.Column<decimal>(nullable: false)
@@ -113,11 +118,11 @@ namespace PizzaBox.Storage.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Pizza_Order_Id",
-                        column: x => x.Id,
+                        name: "FK_Pizza_Order_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Order",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Pizza_Size_SizeId",
                         column: x => x.SizeId,
@@ -141,7 +146,7 @@ namespace PizzaBox.Storage.Migrations
                         name: "FK_OrderPizza_Order_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Order",
-                        principalColumn: "Id",
+                        principalColumn: "OrderId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OrderPizza_Pizza_PizzaId",
@@ -180,9 +185,9 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 637192821991058520L, "Thin Crust", 2.00m },
-                    { 637192821991100140L, "New York Style", 3.00m },
-                    { 637192821991100206L, "Deep Dish", 4.00m }
+                    { 637193588579145321L, "Thin Crust", 2.00m },
+                    { 637193588579147128L, "New York Style", 3.00m },
+                    { 637193588579147202L, "Deep Dish", 4.00m }
                 });
 
             migrationBuilder.InsertData(
@@ -190,9 +195,18 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 637192821991115993L, "Small", 10.00m },
-                    { 637192821991116061L, "Medium", 12.00m },
-                    { 637192821991116068L, "Large", 14.00m }
+                    { 637193588579148213L, "Small", 10.00m },
+                    { 637193588579148266L, "Medium", 12.00m },
+                    { 637193588579148273L, "Large", 14.00m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Store",
+                columns: new[] { "StoreId", "Address", "Phone", "StoreName" },
+                values: new object[,]
+                {
+                    { 637193588579072962L, "501 Main St, Fake_City, Fake_State, 90210", "1900pizzapls", "Jim's Pizza #1" },
+                    { 637193588579121430L, "2435 W 57th Ave, Fake_City, Fake_State, 90210", "1900pizzanow", "Jim's Pizza #32" }
                 });
 
             migrationBuilder.InsertData(
@@ -200,9 +214,9 @@ namespace PizzaBox.Storage.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 637192821991116904L, "Cheese", 0.25m },
-                    { 637192821991116944L, "Pepperoni", 0.75m },
-                    { 637192821991116950L, "Sauce", 0.55m }
+                    { 637193588579149132L, "Cheese", 0.25m },
+                    { 637193588579149179L, "Pepperoni", 0.75m },
+                    { 637193588579149186L, "Sauce", 0.55m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -214,6 +228,11 @@ namespace PizzaBox.Storage.Migrations
                 name: "IX_Pizza_CrustId",
                 table: "Pizza",
                 column: "CrustId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pizza_OrderId",
+                table: "Pizza",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pizza_SizeId",

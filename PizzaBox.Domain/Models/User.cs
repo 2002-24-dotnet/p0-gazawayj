@@ -1,10 +1,12 @@
 using System;
 
+
 namespace PizzaBox.Domain.Models
 {
   public class User
   {
     private long _id;
+
     public long Id
     {
         get { return _id; }
@@ -44,7 +46,7 @@ namespace PizzaBox.Domain.Models
     
     public User()
     {
-      Id = DateTime.Now.Ticks;
+      //Id = DateTime.Now.Ticks;
     }
     private bool _isStore;
     public bool IsStore

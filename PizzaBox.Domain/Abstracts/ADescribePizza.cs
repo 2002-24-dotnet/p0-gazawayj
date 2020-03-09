@@ -10,7 +10,7 @@ namespace PizzaBox.Domain.Abstracts
     public virtual decimal Price { get; set; }
     public ADescribePizza()
     {
-      Id = DateTime.Now.Ticks;
+      //Id = DateTime.Now.Ticks;
     }
   }
 }

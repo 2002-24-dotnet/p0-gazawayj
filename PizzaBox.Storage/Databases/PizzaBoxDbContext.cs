@@ -47,16 +47,22 @@ namespace PizzaBox.Storage.Databases
       builder.Entity<Pizza>().HasKey(p => p.Id);
       //TODO: Complete the connections for below entities
       builder.Entity<User>().HasKey(u => u.Id);
-      builder.Entity<Order>().HasKey(o => o.Id);
-      builder.Entity<Store>().HasKey(s => s.Id);
+      builder.Entity<Order>().HasKey(o => o.OrderId);
+      builder.Entity<Store>().HasKey(s => s.StoreId);
+
 
       //One crust can be on many pizzas, but each pizza can only have one crust
       builder.Entity<Crust>().HasMany(c => c.Pizzas).WithOne(p => p.Crust);
       builder.Entity<Pizza>().HasMany(p => p.Toppings).WithOne(pt => pt.Pizza).HasForeignKey(pt => pt.PizzaId);
       builder.Entity<Size>().HasMany(s => s.Pizzas).WithOne(p => p.Size);
       builder.Entity<Topping>().HasMany(t => t.PizzaToppings).WithOne(pt => pt.Topping).HasForeignKey(pt => pt.Id);
-      builder.Entity<Order>().HasMany(p => p.Pizzas).WithOne(o => o.Order).HasForeignKey(p => p.Id);
+      //builder.Entity<Order>().HasMany(p => p.Pizzas).WithOne(o => o.Order).HasForeignKey(p => p.Id);
 
+      builder.Entity<Store>().HasData(new Store[]
+      {
+        new Store() { StoreName = "Jim's Pizza #1", Address = "501 Main St, Fake_City, Fake_State, 90210", Phone = "1900pizzapls" },
+        new Store() { StoreName = "Jim's Pizza #32", Address = "2435 W 57th Ave, Fake_City, Fake_State, 90210", Phone = "1900pizzanow" }
+      });
       //Defines all the crust
       builder.Entity<Crust>().HasData(new Crust[]
       {

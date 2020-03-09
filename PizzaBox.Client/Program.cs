@@ -3,19 +3,16 @@ using System;
 using System.Collections.Generic;
 using PizzaBox.Client.Controllers;
 using PizzaBox.Domain.Models;
-using PizzaBox.Domain.Singleton;
 
 namespace PizzaBox.Client
 {
   internal class Program
   {
-    //private static readonly PizzariaSingleton _pr = PizzariaSingleton.Instance;
     private static UserController _uc = new UserController();
     private static OrderController _oc = new OrderController();
     private static StoreController _sc = new StoreController();
     private static User _user;
     private static Store _store;
-    private static Order _newOrder;
 
     private static void Main(string[] args)
     {
@@ -26,98 +23,213 @@ namespace PizzaBox.Client
         System.Console.WriteLine("1. Log in." + Environment.NewLine + "2. Create User.");
         int selection = Int32.Parse(System.Console.ReadLine());
         if (selection == 1) { loggedIn = DoLoginRoutine(); }
-        if (selection == 2) { CreateUser(); }
+        else if (selection == 2) { CreateUser(); }
         else { System.Console.WriteLine("Sorry, I didn't understand that."); }
       }
       bool stillUsing = true;
-      while (stillUsing)
+      while (stillUsing && !_user.IsStore)
       {
         System.Console.WriteLine("Please select an option:" + Environment.NewLine + "1. Create an order.");
         System.Console.WriteLine("2. See available stores." + Environment.NewLine + "3. See order history.");
         System.Console.WriteLine("4. Quit.");
         int selection = Int32.Parse(System.Console.ReadLine());
         if (selection == 1) { CreateOrder(); }
+        else if (selection == 2) { ListStores(); }
+        else if (selection == 3) { ShowOrderHistory(); }
+        else 
+        {
+          System.Console.WriteLine("Exiting the program.");
+          stillUsing = false;
+        }
       }
+      while (stillUsing && _user.IsStore)
+      {
+        System.Console.WriteLine("Please select an option: " + Environment.NewLine + "1. See store order history.");
+        System.Console.WriteLine("2. See sales." + Environment.NewLine + "3. Quit.");
+        int selection = Int32.Parse(System.Console.ReadLine());
+        if (selection == 1) { ShowStoreOrderHistory(); }
+        else if (selection == 2) { ShowStoreSales(); }
+        else if (selection == 3)
+        {
+          System.Console.WriteLine("Exiting the program.");
+          stillUsing = false;
+        }
+      }
+    }
 
-      //TODO: Ask for log in type
-      //TODO: Ask for user name and password
-      //TODO: Create connection to storage
-      //TODO: Log in using given info
-      //TODO: Display options based on login type
-      //TODO: Interact with storage to satisfy business logic
+    private static void ShowStoreSales()
+    {
+      System.Console.WriteLine("Showing sales for store:");
+      List<Order> orders = _uc.ViewStoreOrderHistory(_store.StoreId);
+      int small = 0;
+      int med = 0;
+      int large = 0;
+      decimal sum = 0.00M;
+      foreach(Order o in orders)
+      {
+        foreach(Pizza p in o.Pizzas)
+        {
+          if (p.Size.Name.Equals("Small"))
+          {
+            small++;
+          }
+          else if (p.Size.Name.Equals("Medium"))
+          {
+            med++;
+          }
+          else
+          {
+            large++;
+          }
+        }
+        sum += o.Price;
+      }
+      System.Console.WriteLine("This store has sold $" + sum + " worth of pizza.");
+      System.Console.WriteLine('\t' + "Small: " + small);
+      System.Console.WriteLine('\t' + "Medium: " + med);
+      System.Console.WriteLine('\t' + "Large: " + large);
 
+    }
+
+    private static void ShowStoreOrderHistory()
+    {
+      System.Console.WriteLine("Please select an option:" + Environment.NewLine + "1. See orders for entire store.");
+      System.Console.WriteLine("2. See orders for a specific client.");
+      int selection = Int32.Parse(System.Console.ReadLine());
+      if (selection == 1)
+      {
+        foreach(Order o in _sc.GetFullOrderHistory(_user.Id))
+        {
+          System.Console.WriteLine(o);
+        }
+      }
+      else 
+      {
+        System.Console.WriteLine("Listing all users of this store:");
+        int counter = 1;
+        foreach(User u in _sc.GetAllCustomersForStore(_user.Id))
+        {
+          System.Console.WriteLine(counter + ". " + u.Name);
+          counter++;
+        }
+        selection = Int32.Parse(System.Console.ReadLine());
+        User selectedUser = _sc.GetAllCustomersForStore(_user.Id).ElementAt(selection);
+        System.Console.WriteLine("Printing Order History for user " + selectedUser.Name);
+        foreach(Order o in _uc.ViewCustOrderHistory(selectedUser.Id))
+        {
+          System.Console.WriteLine(o);
+        }
+      }
+    }
+
+    private static void ShowOrderHistory()
+    {
+      System.Console.WriteLine("Order history for user " + _user.Name + ":");
+      foreach(Order o in _uc.ViewCustOrderHistory(_user.Id))
+      {
+        System.Console.WriteLine(o);
+      }
+    }
+
+    private static void ListStores()
+    {
+      int counter = 1;
+      foreach (Store s in _uc.ViewStores())
+      {
+        System.Console.WriteLine(counter + ". " + s.StoreName + " " + s.Address);
+        counter++;
+      }
     }
 
     private static void CreateOrder()
     {
-      System.Console.WriteLine("Creating new order.");
+      Order newOrder = new Order();
+      newOrder.CustomerId = _user.Id;
+      if (_user.IsStore)
+      {
+         newOrder.StoreId = _store.StoreId;
+      }
       long storeID = GetStoreSelection();
-      List<Pizza> pizzas = GetPizzaSelections();
+      bool createOrder;
+      (createOrder, newOrder.Pizzas) = GetPizzaSelections();
+      if (createOrder)
+      {
+        System.Console.WriteLine("Creating new order.");
+        _oc.CreateOrder(newOrder);
+      }
+      else 
+      {
+        System.Console.WriteLine("Canceling out of order.");
+      }
     }
 
-    private static List<Pizza> GetPizzaSelections()
+    private static (bool, List<Pizza>) GetPizzaSelections()
     {
       bool creatingMore = true;
+      bool creatingOrder = false;
+      List<Pizza> createdPizzas = new List<Pizza>();
       while (creatingMore)
       {
-        System.Console.WriteLine("Let's create a pizza!" + Environment.NewLine + "What size pizza would you like?");
-        List<Size> sizes = _sc.GetAvailableSizes();
-        int counter = 1;
-        foreach (Size s in sizes)
-        {
-          System.Console.WriteLine(counter + ". " + s.Name);
-          counter++;
-        }
+        System.Console.WriteLine("Please make a selection for your order:");
+        System.Console.WriteLine("1. Add a pizza to the order." + Environment.NewLine + "2. Remove a pizza from the order.");
+        System.Console.WriteLine("3. See order total." + Environment.NewLine + "4. Complete Order.");
+        System.Console.WriteLine("5. Cancel out of order.");
         int selection = Int32.Parse(System.Console.ReadLine());
-        Size selectedSize = sizes.ElementAt(selection);
-        counter = 1;
-        System.Console.WriteLine("What type of crust would you like?");
-        List<Crust> crusts = _sc.GetAvailableCrusts();
-        foreach (Crust c in crusts)
+        //Create a pizza to add to the order
+        if (selection == 1)
         {
-          System.Console.WriteLine(counter + ". " + c.Name);
-          counter++;
+          CreatePizzaFlow(createdPizzas);
         }
-        selection = Int32.Parse(System.Console.ReadLine());
-        Crust selectedCrust = crusts.ElementAt(selection);
-        counter = 1;
-        bool choosingToppings = true;
-        List<Topping> availableToppings = _sc.GetAvailableToppings();
-        List<Topping> selectedToppings = new List<Topping>();
-        while (choosingToppings)
+        //Remove a pizza from the order
+        if (selection == 2)
         {
-          System.Console.WriteLine("What topping would you like to add?");
-          System.Console.WriteLine("0. No more toppings.");
-          foreach(Topping t in availableToppings)
-          {
-            System.Console.WriteLine(counter + ". " + t.Name);
-            counter++;
-          }
-          selection = Int32.Parse(System.Console.ReadLine());
-          if (selection == 0)
-          {
-            choosingToppings = false;
-            System.Console.WriteLine("Adding pizza to order if valid");
-          }
-          else 
-          {
-            selectedToppings.Add(availableToppings.ElementAt(selection));
-            availableToppings.Remove(availableToppings.ElementAt(selection));
-          }
+          RemovePizzaFlow(createdPizzas);
         }
-        List<PizzaTopping> pizzaToppingList = new List<PizzaTopping>();
-        foreach (Topping t in selectedToppings)
+        else if (selection == 3)
         {
-          
+          DisplayOrderTotal(createdPizzas);
         }
-        Pizza userPizza = new Pizza() 
+        //Complete the order
+        else if (selection == 4)
         {
-          Crust = selectedCrust, Size = selectedSize, Toppings = new PizzaTopping() 
-          {
-            selectedToppings
-          };
-        };
+          creatingMore = false;
+          creatingOrder = true;
+        }
+        //Cancle current order
+        else
+        {
+          creatingMore = false;
+          creatingOrder = false;
+        }
       }
+      return (creatingOrder, createdPizzas);
+    }
+
+    private static void DisplayOrderTotal(List<Pizza> createdPizzas)
+    {
+      System.Console.WriteLine("Current order:");
+      decimal sum = 0.00M;
+      foreach (Pizza p in createdPizzas)
+      {
+        sum += p.Price;
+        System.Console.WriteLine(p);
+      }
+      System.Console.WriteLine("____________________________");
+      System.Console.WriteLine("Total cost of order: " + sum);
+    }
+
+    private static void RemovePizzaFlow(List<Pizza> createdPizzas)
+    {
+      int counter = 1;
+      System.Console.WriteLine("Please select a pizza to remove:");
+      foreach (Pizza p in createdPizzas)
+      {
+        System.Console.WriteLine(counter + ". " + p);
+        counter++;
+      }
+      int selection = Int32.Parse(System.Console.ReadLine());
+      createdPizzas.Remove(createdPizzas.ElementAt(selection));
+      System.Console.WriteLine("Pizza removed.");
     }
 
     private static long GetStoreSelection()
@@ -131,8 +243,8 @@ namespace PizzaBox.Client
         counter++;
       }
       int selection = Int32.Parse(System.Console.ReadLine());
-      _uc.SetStore(stores.ElementAt(selection).Id);
-      return stores.ElementAt(selection).Id;
+      _uc.SetStore(stores.ElementAt(selection).StoreId);
+      return stores.ElementAt(selection).StoreId;
     }
 
     private static void CreateUser()
@@ -163,45 +275,77 @@ namespace PizzaBox.Client
       System.Console.WriteLine("Please insert your password:");
       string password = System.Console.ReadLine();
       _user = _uc.LogIn(userName, password);
+      if (_user.IsStore)
+      {
+        _store = _uc.SetStore(_user.Id);
+      }
       return (_user != null);
     }
 
-    // private static void PostPizza()
-    // {
-    //   //_pr.Post()
-    // }
-
-    // private static void GetAllToppings()
-    // {
-    //   foreach (var t in _pr.GetAllToppings())
-    //   {
-    //     System.Console.WriteLine(t.Name);
-    //   }
-    // }
-
-    // private static void GetAllSizes()
-    // {
-    //   foreach (var s in _pr.GetAllSizes())
-    //   {
-    //     System.Console.WriteLine(s.Name);
-    //   }
-    // }
-
-    // private static void GetAllCrusts()
-    // {
-    //   foreach (var c in _pr.GetAllCrusts())
-    //   {
-    //     System.Console.WriteLine(c.Name);
-    //   }
-    // }
-
-    // private static void GetAllPizzas()
-    // {
-
-    //   foreach (var p in _pr.GetAllPizzas())
-    //   {
-    //     System.Console.WriteLine(p);
-    //   }
-    // }
+    private static void CreatePizzaFlow(List<Pizza> createdPizzas)
+    {
+      System.Console.WriteLine("Let's create a pizza!" + Environment.NewLine + "What size pizza would you like?");
+      List<Size> sizes = _sc.GetAvailableSizes();
+      int counter = 1;
+      foreach (Size s in sizes)
+      {
+        System.Console.WriteLine(counter + ". " + s.Name);
+        counter++;
+      }
+      int selection = Int32.Parse(System.Console.ReadLine());
+      Size selectedSize = sizes.ElementAt(selection);
+      counter = 1;
+      System.Console.WriteLine("What type of crust would you like?");
+      List<Crust> crusts = _sc.GetAvailableCrusts();
+      foreach (Crust c in crusts)
+      {
+        System.Console.WriteLine(counter + ". " + c.Name);
+        counter++;
+      }
+      selection = Int32.Parse(System.Console.ReadLine());
+      Crust selectedCrust = crusts.ElementAt(selection);
+      counter = 1;
+      bool choosingToppings = true;
+      List<Topping> availableToppings = _sc.GetAvailableToppings();
+      List<Topping> selectedToppings = new List<Topping>();
+      while (choosingToppings)
+      {
+        System.Console.WriteLine("What topping would you like to add?");
+        System.Console.WriteLine("0. No more toppings.");
+        foreach (Topping t in availableToppings)
+        {
+          System.Console.WriteLine(counter + ". " + t.Name);
+          counter++;
+        }
+        selection = Int32.Parse(System.Console.ReadLine());
+        if (selection == 0)
+        {
+          choosingToppings = false;
+          System.Console.WriteLine("Adding pizza to order if valid");
+        }
+        else
+        {
+          selectedToppings.Add(availableToppings.ElementAt(selection));
+          availableToppings.Remove(availableToppings.ElementAt(selection));
+        }
+      }
+      List<PizzaTopping> pizzaToppingList = new List<PizzaTopping>();
+      Pizza userPizza = new Pizza();
+      foreach (Topping t in selectedToppings)
+      {
+        pizzaToppingList.Add(new PizzaTopping()
+        {
+          PizzaId = userPizza.Id,
+          Pizza = userPizza,
+          Id = DateTime.Now.Ticks,
+          Topping = t
+        });
+      }
+      userPizza.Crust = selectedCrust;
+      userPizza.Size = selectedSize;
+      userPizza.Toppings = pizzaToppingList;
+      createdPizzas.Add(userPizza);
+      _oc.CreatePizza(userPizza);
+    }
   }
 }

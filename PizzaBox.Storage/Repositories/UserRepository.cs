@@ -19,7 +19,18 @@ namespace PizzaBox.Storage.Repositories
     //READ of CRUD that returns all users of that store
     public List<User> ReadAllClientsForStore(long storeId)
     {
-      return _db.User.ToList();
+      HashSet<long> users = new HashSet<long>();
+      List<User> userList = new List<User>();
+      List<Order> orders = _db.Order.Where(o => o.StoreId == storeId).ToList();
+      foreach (Order o in orders)
+      {
+        users.Add(o.CustomerId);
+      }
+      foreach(long user in users)
+      {
+        userList.Add(_db.User.SingleOrDefault(u => u.Id == user));
+      }
+      return userList;
     }
     //READ of CRUD that returns a particular user of a store
     public User ReadUser(long Id)
@@ -52,7 +63,7 @@ namespace PizzaBox.Storage.Repositories
 
     public Store FindStore(long id)
     {
-      return _db.Store.SingleOrDefault(s => s.Id == id);
+      return _db.Store.SingleOrDefault(s => s.StoreId == id);
     }
 
     public List<Order> GetAllOrdersForStore(long id)
