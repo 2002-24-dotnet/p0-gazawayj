@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PizzaBox.Domain.Models;
 using PizzaBox.Storage.Repositories;
@@ -28,15 +29,58 @@ namespace PizzaBox.Client.Singleton
     {
       return _ur.ReadAllClientsForStore(StoreId);
     }
-    public bool CheckLoginInfo(long id, string userName, string pass)
+    public User CheckLoginInfo(string userName, string pass)
     {
-      var temp = _ur.ReadUser(id);
-      return (temp.Login == userName && temp.Password == pass);
+      var temp = _ur.FindUser(userName);
+      if (temp != null && temp.Login == userName && temp.Password == pass)
+      {
+        return temp;
+      }
+      return null;
     }
+
+    public List<Store> GetStores()
+    {
+      return _ur.GetStores();
+    }
+
+    public List<Order> GetUserOrderHistory(long userId)
+    {
+      return _ur.GetUserOrderHistory(userId);
+    }
+
     public User GetUser(long Id)
     {
       return _ur.ReadUser(Id);
     }
-    
+
+    public Store GetStore(long id)
+    {
+      return _ur.FindStore(id);
+    }
+
+    internal List<Order> GetStoreOrderHistory(long id)
+    {
+      return _ur.GetAllOrdersForStore(id);
+    }
+
+    internal string GetStoreSales(long id)
+    {
+      decimal totalSales = 0.00M;
+      int numLarge = 0;
+      int numMed = 0;
+      int numSmall = 0;
+      foreach(Order o in GetStoreOrderHistory(id))
+      {
+        totalSales += o.Price;
+        foreach(Pizza p in o.Pizzas)
+        {
+          if (p.Size.Name == "Small") {numSmall++;}
+          if (p.Size.Name == "Medium") {numMed++;}
+          else {numLarge++;}
+        }
+      }
+      return "Pizzas sold: " + numLarge + " Large, " + numMed + " Medium, " + numSmall + " Small. Total sales: " + totalSales;
+    }
   }
 }

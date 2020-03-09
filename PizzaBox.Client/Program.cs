@@ -1,16 +1,20 @@
-﻿using System;
+﻿using PizzaBox.Domain.Controller;
+using PizzaBox.Domain.Models;
 using PizzaBox.Domain.Singleton;
-using PizzaBox.Storage.Repositories;
 
 namespace PizzaBox.Client
 {
   internal class Program
   {
     private static readonly PizzariaSingleton _pr = PizzariaSingleton.Instance;
+    private static UserController _uc = new UserController();
     private static void Main(string[] args)
     {
       System.Console.WriteLine("Type in your username please:");
       string user = System.Console.ReadLine();
+      System.Console.WriteLine("Type in your password please:");
+      string pass = System.Console.ReadLine();
+      User currentUser = _uc.LogIn(user, pass);
       //TODO: Ask for log in type
       //TODO: Ask for user name and password
       //TODO: Create connection to storage

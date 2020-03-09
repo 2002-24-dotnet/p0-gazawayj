@@ -28,6 +28,17 @@ namespace PizzaBox.Domain.Models
         get { return _pizzas; }
         set { _pizzas = value; }
     }
-    
+
+    public decimal Price { 
+      get
+      {
+        decimal sum = 0.00M;
+        foreach (Pizza p in Pizzas)
+        {
+          sum += p.Price;
+        }
+        return sum;
+      }
+    }
   }
 }

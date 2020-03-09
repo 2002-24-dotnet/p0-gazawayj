@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain.Models;
@@ -38,6 +39,30 @@ namespace PizzaBox.Storage.Repositories
       User temp = ReadUser(id);
       _db.Remove(temp);
       return _db.SaveChanges() == 1;
+    }
+
+    public User FindUser(string userName)
+    {
+      return _db.User.SingleOrDefault(u => u.Login == userName);
+    }
+    public List<Store> GetStores()
+    {
+      return _db.Store.ToList();
+    }
+
+    public Store FindStore(long id)
+    {
+      return _db.Store.SingleOrDefault(s => s.Id == id);
+    }
+
+    public List<Order> GetAllOrdersForStore(long id)
+    {
+      return _db.Order.Where(o => o.StoreId == id).ToList();
+    }
+
+    public List<Order> GetUserOrderHistory(long id)
+    {
+      return _db.Order.Where(o => o.CustomerId == id).ToList();
     }
   }
 }
