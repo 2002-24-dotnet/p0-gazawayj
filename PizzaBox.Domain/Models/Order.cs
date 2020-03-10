@@ -50,7 +50,7 @@ namespace PizzaBox.Domain.Models
     }
     public override string ToString()
     {
-      return " " + PizzasString();
+      return Price + Environment.NewLine + PizzasString();
     }
 
     private string PizzasString()

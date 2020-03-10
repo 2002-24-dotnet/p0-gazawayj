@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using PizzaBox.Domain.Models;
 using PizzaBox.Storage.Databases;
 
@@ -71,12 +72,21 @@ namespace PizzaBox.Storage.Repositories
 
     public List<Order> GetAllOrdersForStore(long id)
     {
-      return _db.Order.Where(o => o.StoreId == id).ToList();
+      return _db.Order        
+        .Include(P => P.Pizzas).ThenInclude(C => C.Crust)
+        .Include(P => P.Pizzas).ThenInclude(T => T.Toppings).ThenInclude(t => t.Topping)
+        .Include(P => P.Pizzas).ThenInclude(T => T.Size)
+        .ToList().Where(o => o.StoreId == id).ToList();
     }
 
     public List<Order> GetUserOrderHistory(long id)
     {
-      return _db.Order.Where(o => o.CustomerId == id).ToList();
+      List<Order> list = _db.Order
+        .Include(P => P.Pizzas).ThenInclude(C => C.Crust)
+        .Include(P => P.Pizzas).ThenInclude(T => T.Toppings).ThenInclude(t => t.Topping)
+        .Include(P => P.Pizzas).ThenInclude(T => T.Size)
+        .ToList().Where(o => o.CustomerId == id).ToList();
+      return list;
     }
   }
 }
